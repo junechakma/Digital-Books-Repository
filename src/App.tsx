@@ -6,6 +6,7 @@ import { Header } from './components/layout/Header';
 import { AdminLayout } from './components/layout/AdminLayout';
 import { HomePage } from './pages/public/HomePage';
 import { BooksPage } from './pages/public/BooksPage';
+import { BookDetailsPage } from './pages/public/BookDetailsPage';
 import { CartPage } from './pages/public/CartPage';
 import { CheckoutPage } from './pages/public/CheckoutPage';
 import { AdminLogin } from './pages/admin/AdminLogin';
@@ -27,6 +28,7 @@ function App() {
                 <Routes>
                   <Route path="/" element={<HomePage />} />
                   <Route path="/books" element={<BooksPage />} />
+                  <Route path="/books/:id" element={<BookDetailsPage />} />
                   <Route path="/cart" element={<CartPage />} />
                   <Route path="/checkout" element={<CheckoutPage />} />
                   <Route path="/admin/login" element={<AdminLogin />} />

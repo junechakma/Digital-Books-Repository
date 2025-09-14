@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Input, Button, LoadingPage } from '../../components/ui';
 import { BookCard } from '../../components/ui/BookCard';
-import { mockBooks, searchBooks } from '../../data/mockBooks';
+import { books, searchBooks } from '../../data/mockBooks';
 import { useDebounce } from '../../hooks/useDebounce';
 
 export const BooksPage: React.FC = () => {
@@ -15,23 +15,23 @@ export const BooksPage: React.FC = () => {
 
   // Get unique subjects
   const subjects = useMemo(() => {
-    const allSubjects = mockBooks.map(book => book.subject);
+    const allSubjects = books.map(book => book.subject);
     return ['All', ...Array.from(new Set(allSubjects))];
   }, []);
 
   // Filter books based on search and subject
   const filteredBooks = useMemo(() => {
-    let books = mockBooks;
+    let filteredBooks = books;
 
     if (debouncedSearchQuery.trim()) {
-      books = searchBooks(debouncedSearchQuery);
+      filteredBooks = searchBooks(debouncedSearchQuery);
     }
 
     if (selectedSubject && selectedSubject !== 'All') {
-      books = books.filter(book => book.subject === selectedSubject);
+      filteredBooks = filteredBooks.filter(book => book.subject === selectedSubject);
     }
 
-    return books;
+    return filteredBooks;
   }, [debouncedSearchQuery, selectedSubject]);
 
   // Update URL when search changes

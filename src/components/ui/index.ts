@@ -4,3 +4,4 @@ export { Modal } from './Modal';
 export { ToastProvider, useToast } from './Toast';
 export { Loading, LoadingPage } from './Loading';
 export { BookCard } from './BookCard';
+export { PDFViewer } from './PDFViewer';
