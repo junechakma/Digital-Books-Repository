@@ -12,31 +12,25 @@ export const Header: React.FC = () => {
     <header className="bg-white shadow-sm border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20 py-2">
-          <Link to="/" className="flex items-center space-x-4">
-            <div className="flex items-center space-x-3">
-              <img 
-                src="/logo.png" 
-                alt="Digital Books Repository" 
-                className="h-16 w-auto"
-                onError={(e) => {
-                  // Fallback if image doesn't exist
-                  e.currentTarget.style.display = 'none';
-                  e.currentTarget.parentElement?.nextElementSibling?.classList.remove('hidden');
-                }}
-              />
-              <img 
-                src="/ugc-latest.png" 
-                alt="UGC Logo" 
-                className="h-12 w-auto"
-                onError={(e) => {
-                  // Hide if image doesn't exist
-                  e.currentTarget.style.display = 'none';
-                }}
-              />
-            </div>
-            <h1 className="text-2xl font-bold text-[#ca1d26] hidden">
-              Digital Books Repository
-            </h1>
+          <Link to="/" className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-shrink-0">
+            <img
+              src="/logo.png"
+              alt="Digital Books Wallet"
+              className="h-12 sm:h-16 w-auto flex-shrink-0"
+              onError={(e) => {
+                // Fallback if image doesn't exist
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+            <img
+              src="/ugc-latest.png"
+              alt="UGC Logo"
+              className="hidden sm:block h-10 sm:h-12 w-auto flex-shrink-0"
+              onError={(e) => {
+                // Hide if image doesn't exist
+                e.currentTarget.style.display = 'none';
+              }}
+            />
           </Link>
           
           <nav className="hidden md:flex space-x-8">
@@ -70,13 +64,14 @@ export const Header: React.FC = () => {
             
             {user ? (
               <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-700">
+                <span className="text-sm text-gray-700 hidden sm:inline truncate">
                   {user.email}
                 </span>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={logout}
+                  className="flex-shrink-0"
                 >
                   Logout
                 </Button>

@@ -57,39 +57,36 @@ export const AdminLayout: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Public Header */}
-      <div className="lg:pl-64">
-        <div className="bg-white shadow-sm border-b border-gray-200 px-4 py-3 lg:hidden">
-          <div className="flex items-center justify-between">
-            <h1 className="text-lg font-bold text-[#ca1d26]">Admin Dashboard</h1>
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="text-gray-500 hover:text-gray-700"
-            >
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
-          </div>
+      {/* Mobile Header */}
+      <div className="bg-white shadow-sm border-b border-gray-200 px-4 py-3 lg:hidden">
+        <div className="flex items-center justify-between">
+          <h1 className="text-lg font-bold text-[#ca1d26]">Admin Dashboard</h1>
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="text-gray-500 hover:text-gray-700"
+          >
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
         </div>
       </div>
 
-      <div className="flex">
-        {/* Sidebar for desktop */}
-        <div className="hidden lg:flex lg:flex-col lg:fixed lg:inset-y-0 lg:w-64 bg-white shadow-lg z-40">
+      {/* Sidebar for desktop */}
+      <div className="hidden lg:flex lg:flex-col lg:fixed lg:inset-y-0 lg:w-64 bg-white shadow-lg z-40">
         {/* Logo */}
         <div className="flex items-center justify-center h-20 px-4 border-b border-gray-200">
-          <div className="flex items-center space-x-3">
-            <img 
-              src="/logo.png" 
-              alt="Logo" 
-              className="h-8 w-auto"
+          <div className="flex items-center space-x-3 min-w-0">
+            <img
+              src="/logo.png"
+              alt="Logo"
+              className="h-8 w-auto flex-shrink-0"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
                 e.currentTarget.nextElementSibling?.classList.remove('hidden');
               }}
             />
-            <h1 className="text-lg font-bold text-[#ca1d26] hidden">Admin</h1>
+            <h1 className="text-lg font-bold text-[#ca1d26] hidden truncate">Admin</h1>
           </div>
         </div>
 
@@ -146,17 +143,17 @@ export const AdminLayout: React.FC = () => {
           <div className="fixed inset-y-0 left-0 flex flex-col w-64 bg-white shadow-lg">
             {/* Same content as desktop sidebar */}
             <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
-              <div className="flex items-center space-x-3">
-                <img 
-                  src="/logo.png" 
-                  alt="Logo" 
-                  className="h-8 w-auto"
+              <div className="flex items-center space-x-3 min-w-0 flex-1">
+                <img
+                  src="/logo.png"
+                  alt="Logo"
+                  className="h-8 w-auto flex-shrink-0"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
                     e.currentTarget.nextElementSibling?.classList.remove('hidden');
                   }}
                 />
-                <h1 className="text-lg font-bold text-[#ca1d26] hidden">Admin</h1>
+                <h1 className="text-lg font-bold text-[#ca1d26] hidden truncate">Admin</h1>
               </div>
               <button
                 onClick={() => setSidebarOpen(false)}
@@ -215,13 +212,11 @@ export const AdminLayout: React.FC = () => {
         </div>
       )}
 
-        {/* Main content */}
-        <div className="flex-1 lg:ml-64">
-          {/* Page content */}
-          <main className="flex-1">
-            <Outlet />
-          </main>
-        </div>
+      {/* Main content */}
+      <div className="lg:pl-64">
+        <main className="min-h-screen">
+          <Outlet />
+        </main>
       </div>
     </div>
   );

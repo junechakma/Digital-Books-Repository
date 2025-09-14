@@ -39,7 +39,7 @@ export const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-[#ca1d26] to-[#b01822] text-white overflow-hidden">
+      <div className="relative bg-gradient-to-r from-[#ca1d26] to-[#b01822] text-white overflow-visible">
         {/* Background Image */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
@@ -50,7 +50,7 @@ export const HomePage: React.FC = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              Digital Books Repository
+              Digital Books Wallet
             </h1>
             <p className="text-xl md:text-2xl mb-12 max-w-3xl mx-auto">
               Access thousands of academic books and resources. 
@@ -58,22 +58,33 @@ export const HomePage: React.FC = () => {
             </p>
 
             {/* Search Bar */}
-            <div className="max-w-2xl mx-auto relative">
-              <form onSubmit={handleSearch} className="flex gap-2">
+            <div className="max-w-2xl mx-auto relative z-[100] px-4 sm:px-0">
+              <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-2 sm:gap-2">
                 <div className="flex-1 relative">
                   <Input
                     type="text"
                     placeholder="Search for books, authors, subjects..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="text-lg py-4 px-6 bg-white text-gray-900"
+                    className="text-base sm:text-lg py-3 sm:py-4 px-4 sm:px-6 pr-12 bg-white text-gray-900 w-full"
                     onFocus={() => setShowSuggestions(suggestions.length > 0)}
                     onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                   />
+                  {/* Search Icon */}
+                  {searchQuery && (
+                    <button
+                      type="submit"
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#ca1d26] hover:text-[#b01822] transition-colors p-1"
+                    >
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      </svg>
+                    </button>
+                  )}
                   
                   {/* Search Suggestions */}
                   {showSuggestions && suggestions.length > 0 && (
-                    <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-md shadow-lg z-10 mt-1">
+                    <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-md shadow-lg z-[100] mt-1">
                       {suggestions.map((book) => (
                         <button
                           key={book.id}
@@ -89,10 +100,10 @@ export const HomePage: React.FC = () => {
                     </div>
                   )}
                 </div>
-                <Button 
+                <Button
                   type="submit"
                   size="lg"
-                  className="px-8 py-4 bg-white text-[#ca1d26] hover:bg-gray-100"
+                  className="hidden sm:flex px-6 sm:px-8 py-3 sm:py-4 text-[#ca1d26] font-semibold border-2 border-gray-100 hover:border-gray-300 shadow-lg w-full sm:w-auto"
                 >
                   Search
                 </Button>
