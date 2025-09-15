@@ -1,0 +1,112 @@
+# Apache .htaccess configuration for UCSI Digital Library API
+# For XAMPP and Hostinger hosting
+
+# Enable URL rewriting
+RewriteEngine On
+
+# Security headers
+Header always set X-Content-Type-Options nosniff
+Header always set X-Frame-Options DENY
+Header always set X-XSS-Protection "1; mode=block"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+# Remove server signature
+ServerTokens Prod
+Header unset Server
+
+# CORS headers (adjust origin for production)
+Header always set Access-Control-Allow-Origin "http://localhost:5173"
+Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+Header always set Access-Control-Allow-Credentials "true"
+
+# Handle preflight OPTIONS requests
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ $1 [R=200,L]
+
+# API routing rules
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Books endpoint
+RewriteRule ^books/?$ endpoints/books.php [QSA,L]
+RewriteRule ^books/([0-9]+)/?$ endpoints/books.php?id=$1 [QSA,L]
+
+# Upload endpoint
+RewriteRule ^upload/?$ endpoints/upload.php [QSA,L]
+
+# Original download endpoint (deprecated)
+RewriteRule ^download/?$ endpoints/download.php [QSA,L]
+RewriteRule ^download/([0-9]+)/?$ endpoints/download.php?id=$1 [QSA,L]
+
+# New UCSI student verification endpoints
+RewriteRule ^verify_download/?$ endpoints/verify_download.php [QSA,L]
+RewriteRule ^secure_download/?$ endpoints/secure_download.php [QSA,L]
+
+# Search endpoint
+RewriteRule ^search/?$ endpoints/search.php [QSA,L]
+
+# Auth endpoints
+RewriteRule ^auth/login/?$ auth/login.php [QSA,L]
+RewriteRule ^auth/logout/?$ auth/logout.php [QSA,L]
+RewriteRule ^auth/check/?$ auth/check.php [QSA,L]
+
+# Deny access to sensitive files and directories
+<FilesMatch "\.(sql|log|md|json)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Deny access to config and classes directories via web
+<Directory "*/config">
+    Order allow,deny
+    Deny from all
+</Directory>
+
+<Directory "*/classes">
+    Order allow,deny
+    Deny from all
+</Directory>
+
+# File upload security
+<Files "*.php">
+    ForceType application/x-httpd-php
+</Files>
+
+# Prevent execution of uploaded files
+<DirectoryMatch "*/uploads">
+    php_flag engine off
+    AddType text/plain .php .phtml .php3 .pht .pl .py .jsp .asp .sh .cgi
+</DirectoryMatch>
+
+# File size limits (adjust as needed)
+php_value upload_max_filesize 50M
+php_value post_max_size 50M
+php_value max_execution_time 300
+php_value max_input_time 300
+php_value memory_limit 256M
+
+# Enable compression for better performance
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/json
+</IfModule>
+
+# Cache control for static assets
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType application/json "access plus 1 minute"
+    ExpiresByType application/pdf "access plus 1 day"
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+</IfModule>
