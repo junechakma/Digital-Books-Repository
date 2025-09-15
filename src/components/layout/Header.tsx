@@ -15,7 +15,7 @@ export const Header: React.FC = () => {
           <Link to="/" className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-shrink-0">
             <img
               src="/logo.png"
-              alt="Digital Books Wallet"
+              alt="UCSI DIGITAL LIBRARY Bangladesh Branch"
               className="h-12 sm:h-16 w-auto flex-shrink-0"
               onError={(e) => {
                 // Fallback if image doesn't exist

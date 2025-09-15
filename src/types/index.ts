@@ -6,6 +6,12 @@ export interface Book {
   description?: string;
   coverImage?: string;
   pdfUrl?: string;
+  edition?: string;
+  publicationDate?: string;
+  publisher?: string;
+  isbn?: string;
+  bookHash?: string;
+  source?: string;
   createdAt: string;
   updatedAt: string;
 }

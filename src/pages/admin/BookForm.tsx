@@ -11,6 +11,12 @@ interface BookFormData {
   description: string;
   coverImage: string;
   pdfUrl: string;
+  edition: string;
+  publicationDate: string;
+  publisher: string;
+  isbn: string;
+  bookHash: string;
+  source: string;
 }
 
 export const BookForm: React.FC = () => {
@@ -25,7 +31,13 @@ export const BookForm: React.FC = () => {
     subject: '',
     description: '',
     coverImage: '',
-    pdfUrl: ''
+    pdfUrl: '',
+    edition: '',
+    publicationDate: '',
+    publisher: '',
+    isbn: '',
+    bookHash: '',
+    source: ''
   });
   
   const [isLoading, setIsLoading] = useState(false);
@@ -57,7 +69,13 @@ export const BookForm: React.FC = () => {
           subject: book.subject,
           description: book.description || '',
           coverImage: book.coverImage || '',
-          pdfUrl: book.pdfUrl || ''
+          pdfUrl: book.pdfUrl || '',
+          edition: book.edition || '',
+          publicationDate: book.publicationDate || '',
+          publisher: book.publisher || '',
+          isbn: book.isbn || '',
+          bookHash: book.bookHash || '',
+          source: book.source || ''
         });
       } else {
         addToast({
@@ -129,6 +147,12 @@ export const BookForm: React.FC = () => {
         description: formData.description.trim(),
         coverImage: formData.coverImage.trim() || undefined,
         pdfUrl: formData.pdfUrl.trim() || undefined,
+        edition: formData.edition.trim() || undefined,
+        publicationDate: formData.publicationDate.trim() || undefined,
+        publisher: formData.publisher.trim() || undefined,
+        isbn: formData.isbn.trim() || undefined,
+        bookHash: formData.bookHash.trim() || undefined,
+        source: formData.source.trim() || undefined,
         createdAt: isEditing ? getBookById(id!)?.createdAt || new Date().toISOString() : new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
@@ -267,6 +291,72 @@ export const BookForm: React.FC = () => {
               placeholder="https://example.com/book.pdf"
               helperText="Provide a URL to the PDF file for download"
             />
+
+            {/* Additional Metadata Section */}
+            <div className="border-t border-gray-200 pt-6">
+              <h3 className="text-lg font-medium text-gray-900 mb-4">Additional Metadata</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Edition */}
+                <Input
+                  label="Edition (Optional)"
+                  name="edition"
+                  value={formData.edition}
+                  onChange={handleInputChange}
+                  placeholder="e.g., 11th Edition"
+                  helperText="Book edition information"
+                />
+
+                {/* Publication Date */}
+                <Input
+                  label="Publication Date (Optional)"
+                  name="publicationDate"
+                  type="date"
+                  value={formData.publicationDate}
+                  onChange={handleInputChange}
+                  helperText="Book publication date"
+                />
+
+                {/* Publisher */}
+                <Input
+                  label="Publisher (Optional)"
+                  name="publisher"
+                  value={formData.publisher}
+                  onChange={handleInputChange}
+                  placeholder="e.g., Pearson Education"
+                  helperText="Book publisher"
+                />
+
+                {/* ISBN */}
+                <Input
+                  label="ISBN (Optional)"
+                  name="isbn"
+                  value={formData.isbn}
+                  onChange={handleInputChange}
+                  placeholder="e.g., 9780134450629"
+                  helperText="International Standard Book Number"
+                />
+
+                {/* Book Hash */}
+                <Input
+                  label="Book Hash (Optional)"
+                  name="bookHash"
+                  value={formData.bookHash}
+                  onChange={handleInputChange}
+                  placeholder="e.g., d36ed937e4458b1cd1989f0bace9b9bf"
+                  helperText="Unique hash identifier for the book file"
+                />
+
+                {/* Source */}
+                <Input
+                  label="Source (Optional)"
+                  name="source"
+                  value={formData.source}
+                  onChange={handleInputChange}
+                  placeholder="e.g., Anna's Archive"
+                  helperText="Source where the book was obtained"
+                />
+              </div>
+            </div>
 
             {/* Preview */}
             {(formData.coverImage || formData.title) && (

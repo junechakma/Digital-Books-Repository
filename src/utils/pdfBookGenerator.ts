@@ -24,9 +24,26 @@ const extractTitleFromFilename = (filename: string): string => {
     .join(' ');
 };
 
-// Helper function to extract author from filename
-const extractAuthorFromFilename = (filename: string): string => {
+// Helper function to parse metadata from filename
+// Format: Title -- Authors -- Edition, Date -- Publisher -- ISBN -- Hash -- Source
+const parseFilenameMetadata = (filename: string) => {
   const parts = filename.split(' -- ');
+
+  const metadata = {
+    title: 'Unknown Title',
+    author: 'Unknown Author',
+    edition: undefined as string | undefined,
+    publicationDate: undefined as string | undefined,
+    publisher: undefined as string | undefined,
+    isbn: undefined as string | undefined,
+    bookHash: undefined as string | undefined,
+    source: undefined as string | undefined
+  };
+
+  if (parts.length >= 1) {
+    metadata.title = extractTitleFromFilename(parts[0]);
+  }
+
   if (parts.length >= 2) {
     let author = parts[1];
     // Clean up author name
@@ -41,10 +58,58 @@ const extractAuthorFromFilename = (filename: string): string => {
       author = `${first} ${last}`;
     }
 
-    return author;
+    metadata.author = author;
   }
 
-  return 'Unknown Author';
+  if (parts.length >= 3) {
+    // Edition and Date (e.g., "11, 2018-02-18")
+    const editionDatePart = parts[2].trim();
+    if (editionDatePart) {
+      const editionDateMatch = editionDatePart.match(/^([^,]+)(?:,\s*(.+))?/);
+      if (editionDateMatch) {
+        if (editionDateMatch[1] && editionDateMatch[1].trim() !== '') {
+          metadata.edition = editionDateMatch[1].trim();
+        }
+        if (editionDateMatch[2] && editionDateMatch[2].trim() !== '') {
+          metadata.publicationDate = editionDateMatch[2].trim();
+        }
+      }
+    }
+  }
+
+  if (parts.length >= 4) {
+    // Publisher
+    const publisher = parts[3].trim();
+    if (publisher && publisher !== '') {
+      metadata.publisher = publisher;
+    }
+  }
+
+  if (parts.length >= 5) {
+    // ISBN
+    const isbn = parts[4].trim();
+    if (isbn && isbn !== '') {
+      metadata.isbn = isbn;
+    }
+  }
+
+  if (parts.length >= 6) {
+    // Hash
+    const hash = parts[5].trim();
+    if (hash && hash !== '') {
+      metadata.bookHash = hash;
+    }
+  }
+
+  if (parts.length >= 7) {
+    // Source (remove .pdf extension if present)
+    let source = parts[6].trim().replace(/\.pdf$/, '');
+    if (source && source !== '') {
+      metadata.source = source;
+    }
+  }
+
+  return metadata;
 };
 
 // Helper function to determine subject from filename/title
@@ -129,21 +194,26 @@ export const generateBooksFromPDFs = (): Book[] => {
   ];
 
   return pdfFiles.map((filename, index) => {
-    const title = extractTitleFromFilename(filename);
-    const author = extractAuthorFromFilename(filename);
-    const subject = determineSubject(title, filename);
-    const description = generateDescription(title, author, subject);
+    const metadata = parseFilenameMetadata(filename);
+    const subject = determineSubject(metadata.title, filename);
+    const description = generateDescription(metadata.title, metadata.author, subject);
     const id = (index + 1).toString();
     const now = new Date().toISOString();
 
     return {
       id,
-      title,
-      author,
+      title: metadata.title,
+      author: metadata.author,
       subject,
       description,
       coverImage: undefined, // No cover images for now
       pdfUrl: `/books/${encodeURIComponent(filename)}`,
+      edition: metadata.edition,
+      publicationDate: metadata.publicationDate,
+      publisher: metadata.publisher,
+      isbn: metadata.isbn,
+      bookHash: metadata.bookHash,
+      source: metadata.source,
       createdAt: now,
       updatedAt: now
     };

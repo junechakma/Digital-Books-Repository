@@ -43,7 +43,7 @@ The application is already configured to use these images:
 
 ## Fallback Behavior:
 
-- If `logo.png` doesn't exist, the text "Digital Books Wallet" will be shown instead
+- If `logo.png` doesn't exist, the text "UCSI DIGITAL LIBRARY Bangladesh Branch" will be shown instead
 - If background images don't exist, the pages will still look good with just the gradient backgrounds
 
 ## Adding Your Images:
